@@ -32,15 +32,28 @@
   <!-- JMS Send, define default destination and JmsTemplate    -->
   <!-- ======================================================= -->
   <!-- Default Destination Queue Definition -->
-  <bean id="defaultDestination" class="org.apache.activemq.command.ActiveMQQueue">
+  <bean id="defaultDestination1" class="org.apache.activemq.command.ActiveMQQueue">
     <!-- name of the queue -->
     <constructor-arg index="0" value="Send2Recv" />
   </bean>
+  
+  <bean id="defaultDestination2" class="org.apache.activemq.command.ActiveMQQueue">
+    <!-- name of the queue -->
+    <constructor-arg index="0" value="Send2Recv" />
+  </bean>
+
  
   <!-- JmsTemplate Definition -->
-  <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+  <bean id="jmsTemplate1" class="org.springframework.jms.core.JmsTemplate">
     <property name="connectionFactory" ref="connectionFactory" />
-    <property name="defaultDestination" ref="defaultDestination" />
+    <property name="defaultDestination" ref="defaultDestination1" />
   </bean>
+
+  <!-- JmsTemplate Definition -->
+  <bean id="jmsTemplate2" class="org.springframework.jms.core.JmsTemplate">
+    <property name="connectionFactory" ref="connectionFactory" />
+    <property name="defaultDestination" ref="defaultDestination2" />
+  </bean>
+
  
 </beans>

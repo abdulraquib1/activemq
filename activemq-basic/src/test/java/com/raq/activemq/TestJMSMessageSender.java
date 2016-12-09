@@ -1,5 +1,7 @@
 package com.raq.activemq;
 
+import static org.junit.Assert.*;
+
 import javax.jms.Queue;
 
 import org.apache.activemq.command.ActiveMQQueue;
@@ -48,6 +50,18 @@ public class TestJMSMessageSender {
 	    jmsMessageSender.send(queue, "hello Another Message");
 	   
 	}
-	
+
+	@Test
+	public void testSendDefaultDestTest() {
+	    jmsMessageSender.sendText("hello JMS Text");
+	}
+
+
+	@Test
+	public void testRecieveMessageTest() {
+	    assertNotNull(jmsMessageSender.recieveText());
+	    System.out.println("receieved text"  + jmsMessageSender.recieveText());
+	}
+
 	
 }
