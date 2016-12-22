@@ -44,8 +44,7 @@ public class TestJMSMessageSender {
 
 	@Test
 	public void testSendAnotherDest() {
-		
-		  // send to a code specified destination
+		// send to a code specified destination
 	    Queue queue = new ActiveMQQueue("AnotherDest");
 	    jmsMessageSender.send(queue, "hello Another Message");
 	   

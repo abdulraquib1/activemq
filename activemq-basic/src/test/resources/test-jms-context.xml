@@ -17,10 +17,19 @@
   <!-- JMS Common, Define JMS connectionFactory       -->
   <!-- =============================================== -->
   <!-- Activemq connection factory -->
+  <!-- brokerURL, You may have different IP or port -->
+  
+ <!--  
   <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-    <!-- brokerURL, You may have different IP or port -->
     <constructor-arg index="0" value="tcp://127.0.0.1:61616" />
   </bean>
+ -->
+ 
+  <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+    <constructor-arg index="0" value="failover:(tcp://127.0.0.1:61616,tcp://127.0.0.1:61617)?randomize=false" />
+  </bean>
+
+ 
  
   <!-- Pooled Spring connection factory -->
   <bean id="connectionFactory"
