@@ -35,6 +35,10 @@ public class TestJMSMessageSender {
 	
 	@Autowired
 	private JMSMessageSender jmsMessageSender;
+	
+	@Autowired
+	private JMSMessageReciever jmsMessageReciever;
+	
 
 	 // send to default destination
 	@Test
@@ -58,8 +62,8 @@ public class TestJMSMessageSender {
 
 	@Test
 	public void testRecieveMessageTest() {
-	    assertNotNull(jmsMessageSender.recieveText());
-	    System.out.println("receieved text"  + jmsMessageSender.recieveText());
+	    assertNotNull(jmsMessageReciever.recieveText());
+	    System.out.println("receieved text"  + jmsMessageReciever.recieveText());
 	}
 
 	

@@ -14,8 +14,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Ref :
- * http://shengwangi.blogspot.in/2014/10/spring-jms-with-activemq-helloworld
- * -example-send.html
+ * http://shengwangi.blogspot.in/2014/10/spring-jms-with-activemq-helloworld-example-send.html
  * 
  * @author araquib
  *
@@ -54,7 +53,7 @@ public class JMSMessageSender {
 		this.jmsTemplate1.convertAndSend(text);
 	}
 
-	public String recieveText() {
+/*	public String recieveText() {
 
 		TextMessage message = (TextMessage) this.jmsTemplate2.receive();
 		try {
@@ -64,7 +63,7 @@ public class JMSMessageSender {
 			return null;
 		}
 
-	}
+	}*/
 
 	/**
 	 * Send text message to a specified destination
