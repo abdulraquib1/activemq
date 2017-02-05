@@ -1,59 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:beans="http://www.springframework.org/schema/beans"
-  xmlns:context="http://www.springframework.org/schema/context"
-  xsi:schemaLocation="
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
     http://www.springframework.org/schema/beans 
     http://www.springframework.org/schema/beans/spring-beans.xsd 
     http://www.springframework.org/schema/context 
     http://www.springframework.org/schema/context/spring-context.xsd">
- 
- 
-  <context:component-scan base-package="com.raq.activemq" />
- 
- 
-  <!-- =============================================== -->
-  <!-- JMS Common, Define JMS connectionFactory       -->
-  <!-- =============================================== -->
-  <!-- Activemq connection factory -->
-  <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-    <!-- brokerURL, You may have different IP or port -->
-    <constructor-arg index="0" value="tcp://127.0.0.1:61616" />
-  </bean>
- 
-  <!-- Pooled Spring connection factory -->
-  <bean id="connectionFactory"
-    class="org.springframework.jms.connection.CachingConnectionFactory">
-    <constructor-arg ref="amqConnectionFactory" />
-  </bean>
- 
-  <!-- ======================================================= -->
-  <!-- JMS Send, define default destination and JmsTemplate    -->
-  <!-- ======================================================= -->
-  <!-- Default Destination Queue Definition -->
-  <bean id="defaultDestination1" class="org.apache.activemq.command.ActiveMQQueue">
-    <!-- name of the queue -->
-    <constructor-arg index="0" value="Send2Recv" />
-  </bean>
-  
-  <bean id="defaultDestination2" class="org.apache.activemq.command.ActiveMQQueue">
-    <!-- name of the queue -->
-    <constructor-arg index="0" value="Send2Recv" />
-  </bean>
 
- 
-  <!-- JmsTemplate Definition -->
-  <bean id="jmsTemplate1" class="org.springframework.jms.core.JmsTemplate">
-    <property name="connectionFactory" ref="connectionFactory" />
-    <property name="defaultDestination" ref="defaultDestination1" />
-  </bean>
 
-  <!-- JmsTemplate Definition -->
-  <bean id="jmsTemplate2" class="org.springframework.jms.core.JmsTemplate">
-    <property name="connectionFactory" ref="connectionFactory" />
-    <property name="defaultDestination" ref="defaultDestination2" />
-  </bean>
+	<context:component-scan base-package="com.raq.activemq" />
 
- 
+
+	<!-- =============================================== -->
+	<!-- JMS Common, Define JMS connectionFactory -->
+	<!-- =============================================== -->
+	<!-- Activemq connection factory -->
+	<!-- 
+	<bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<constructor-arg index="0" value="tcp://127.0.0.1:61616" />
+	</bean>
+	 -->
+	<!--  
+	  setter injection
+	  <bean id="connectionFactory"
+         class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://localhost:61616" />
+    </bean>
+     
+	-->
+	
+	<!-- FailOver Connection Factory -->
+	<bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+    	<constructor-arg index="0" value="failover:(tcp://127.0.0.1:61616,tcp://127.0.0.1:61617)?randomize=false" />
+  	</bean>
+	
+
+	<!-- Pooled Spring connection factory -->
+	<bean id="connectionFactory"
+		class="org.springframework.jms.connection.CachingConnectionFactory">
+		<constructor-arg ref="amqConnectionFactory" />
+	</bean>
+
+	<!-- ======================================================= -->
+	<!-- JMS Send, define default destination and JmsTemplate -->
+	<!-- ======================================================= -->
+	<!-- Default Destination Queue Definition -->
+	<bean id="defaultDestination1" class="org.apache.activemq.command.ActiveMQQueue">
+		<!-- name of the queue -->
+		<constructor-arg index="0" value="Send2Recv" />
+	</bean>
+
+	<bean id="defaultDestination2" class="org.apache.activemq.command.ActiveMQQueue">
+		<!-- name of the queue -->
+		<constructor-arg index="0" value="Send2Recv" />
+	</bean>
+
+
+	<!-- JmsTemplate Definition -->
+	<bean id="jmsTemplate1" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="defaultDestination1" />
+	</bean>
+
+	<!-- JmsTemplate Definition -->
+	<bean id="jmsTemplate2" class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="defaultDestination2" />
+	</bean>
+
+	<bean id="consumer" class="com.raq.activemq.SpringMessageProcessor" />
+
+	<bean class="org.springframework.jms.listener.SimpleMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destinationName" value="Send2Recv" />
+		<property name="messageListener" ref="consumer" />
+	</bean>
+
+
 </beans>
