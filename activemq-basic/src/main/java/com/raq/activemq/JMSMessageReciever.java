@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 public class JMSMessageReciever {
 
 	@Autowired
-	private JmsTemplate jmsTemplate2;
+	private JmsTemplate jmsTemplate;
 	
 	
 	public String recieveText() {
 
-		TextMessage message = (TextMessage) this.jmsTemplate2.receive();
+		TextMessage message = (TextMessage) this.jmsTemplate.receive();
 		try {
 			return message.getText();
 		} catch (JMSException e) {

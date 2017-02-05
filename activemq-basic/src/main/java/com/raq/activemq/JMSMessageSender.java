@@ -3,7 +3,6 @@ package com.raq.activemq;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.TextMessage;
 import javax.jms.Session;
 
 import org.apache.activemq.command.ActiveMQQueue;
@@ -24,7 +23,7 @@ import org.springframework.stereotype.Service;
 public class JMSMessageSender {
 
 	@Autowired
-	private JmsTemplate jmsTemplate1, jmsTemplate2;
+	private JmsTemplate jmsTemplate;
 
 	/**
 	 * send text to default destination
@@ -33,7 +32,7 @@ public class JMSMessageSender {
 	 */
 	public void send(final String text) {
 
-		this.jmsTemplate1.send(new MessageCreator() {
+		this.jmsTemplate.send(new MessageCreator() {
 			public Message createMessage(Session session) throws JMSException {
 				Message message = session.createTextMessage(text);
 				// set ReplyTo header of Message, pretty much like the concept
@@ -50,20 +49,9 @@ public class JMSMessageSender {
 	 * @param text
 	 */
 	public void sendText(final String text) {
-		this.jmsTemplate1.convertAndSend(text);
+		this.jmsTemplate.convertAndSend(text);
 	}
 
-/*	public String recieveText() {
-
-		TextMessage message = (TextMessage) this.jmsTemplate2.receive();
-		try {
-			return message.getText();
-		} catch (JMSException e) {
-
-			return null;
-		}
-
-	}*/
 
 	/**
 	 * Send text message to a specified destination
@@ -72,7 +60,7 @@ public class JMSMessageSender {
 	 */
 	public void send(final Destination dest, final String text) {
 
-		this.jmsTemplate1.send(dest, new MessageCreator() {
+		this.jmsTemplate.send(dest, new MessageCreator() {
 			public Message createMessage(Session session) throws JMSException {
 				Message message = session.createTextMessage(text);
 				return message;
